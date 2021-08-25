@@ -4,7 +4,7 @@ import { timestamps } from '../helpers';
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('applications', function (table) {
-        table.bigIncrements('id');
+        table.bigIncrements('id').primary();
         table.uuid('uuid').index();
         table.integer('userid');
         table.integer('jobid');

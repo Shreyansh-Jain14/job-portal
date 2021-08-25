@@ -3,7 +3,7 @@ import { timestamps } from '../helpers';
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('jobs', function (table) {
-        table.bigIncrements('id');
+        table.bigIncrements('id').primary();
         table.uuid('uuid').index();
         table.string('title');
         table.string('location').nullable();

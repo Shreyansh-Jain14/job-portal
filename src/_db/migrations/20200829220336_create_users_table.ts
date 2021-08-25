@@ -3,11 +3,11 @@ import { timestamps } from '../helpers';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('users', function (table) {
-    table.bigIncrements('id');
-    table.uuid('uuid').index();
-    table.string('first_name');
-    table.string('last_name').nullable();
-    table.string('username').nullable().index();
+    table.uuid('id').index().primary();
+    table.string('name');
+    table.string('email').nullable();
+    table.string('password').nullable().index();
+    table.string('role');
     timestamps(knex, table);
   });
 }
