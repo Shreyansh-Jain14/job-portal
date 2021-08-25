@@ -9,15 +9,8 @@ export class UserController extends RestController {
     super();
   }
 
-  @Get('/profile')
-  @WithAlias('auth.profile')
-  async getProfile(
-    @Req() req: Request,
-    @Res() res: Response,
-  ): Promise<Response> {
-    const user = await this.users.get();
-    return res.success(
-      await this.transform(user, new UserDetailTransformer(), { req }),
-    );
+  @Get()
+  async getAll() {
+    return await this.users.get();
   }
 }

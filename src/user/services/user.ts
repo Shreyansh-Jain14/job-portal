@@ -14,6 +14,9 @@ export class UserService {
   async get(): Promise<Record<string, any>> {
     return this.users.firstWhere({});
   }
+  async getUserByEmail(email: string): Promise<Record<string, any>> {
+    return this.users.getWhere({email });
+  }
 
   @ListensTo('USER_SIGNED_UP')
   userSignedUp(event: UserSignedUp): void {
