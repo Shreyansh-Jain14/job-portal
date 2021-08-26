@@ -9,8 +9,8 @@ export class UserController extends RestController {
     super();
   }
 
-  @Get()
-  async getAll() {
-    return await this.users.get();
-  }
+  // @Get()
+  // async getAll() {
+  //   return await this.users.get();
+  // }
 }

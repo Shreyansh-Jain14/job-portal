@@ -1,1 +1,2 @@
 export const JWT_SECRET = 'd2aaa6dae4a06b8d2130';
+export const RESET_PASSWORD_REPOSITORY = 'RESET_PASSWORD_REPOSITORY';

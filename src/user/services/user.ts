@@ -16,11 +16,16 @@ export class UserService {
   async getUserByEmail(email: string): Promise<Record<string, any>> {
     return this.users.firstWhere({ email });
   }
+  async getById(id: string) {
+    return this.users.firstWhere({ id });
+  }
 
   async createUser(user: User$Model): Promise<User$Model> {
     return this.users.create(user);
   }
-
+  async updateUser(user: User$Model): Promise<number> {
+    return this.users.updateWhere({ id: user.id }, user);
+  }
   @ListensTo('USER_SIGNED_UP')
   userSignedUp(event: UserSignedUp): void {
     console.log('EVENT RECEIVED ===>', event);

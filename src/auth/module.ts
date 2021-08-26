@@ -10,11 +10,16 @@ import { JWT_SECRET } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
+import { ResetPasswordRepository } from './repositories/resetPasswordSecret/database';
+import { RESET_PASSWORD_REPOSITORY } from './constants';
+import { AdminAuthController } from './controllers/admin';
+import { UserRepository } from '@app/user/repositories';
 
 @Module({
   imports: [
     UserModule,
     ConfigModule,
+    UserRepository,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -27,7 +32,8 @@ import { config } from 'dotenv';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  controllers: [AuthController, AdminAuthController],
+  providers: [
+    AuthService, JwtStrategy, LocalStrategy,{ provide: RESET_PASSWORD_REPOSITORY, useClass: ResetPasswordRepository },],
 })
 export class AuthModule {}

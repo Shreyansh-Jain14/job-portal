@@ -9,9 +9,9 @@ import { UserRepository } from './repositories';
   imports: [HttpModule],
   controllers: [UserController],
   providers: [
-    UserService,
+    UserService,UserRepository,
     { provide: USER_REPOSITORY, useClass: UserRepository },
   ],
-  exports: [UserService],
+  exports: [UserService,UserRepository],
 })
 export class UserModule {}

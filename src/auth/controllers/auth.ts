@@ -7,6 +7,7 @@ import {
   HttpException,
   Post,
   Req,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -43,17 +44,26 @@ export class AuthController extends RestController {
   getMe(@Req() req: Request & { user: User$Model }) {
     return req.user;
   }
-
+  
   @Post('resetPassword')
-  resetPassword(
-    @Body('password') password: string,
-    @Body('secret') secret: string,
+  async resetPassword(
+    @Query('secret') secret: string,
+    @Body('password') password?: string,
   ) {
-    return { password, secret };
+    if (!password) {
+      const user = await this.authService.getUserBySecret(secret);
+      if (!user) throw new HttpException('Wrong secret', 401);
+      return user;
+    }
+    const updatedUser = await this.authService.resetPassword(secret, password);
+    if (!updatedUser) throw new HttpException('Wrong secret', 401);
+    return updatedUser;
   }
 
   @Post('forgetPassword')
-  forgetPassword(@Body('email') email: string) {
-    return { email };
+  async forgetPassword(@Body('email') email: string) {
+    const data = await this.authService.forgetPassword(email);
+    if (!data) throw new HttpException('User not found', 404);
+    return data;
   }
 }
