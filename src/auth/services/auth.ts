@@ -1,4 +1,4 @@
- import bcrypt from 'bcrypt';
+ import * as bcrypt from 'bcrypt';
 import { UserService } from '@app/user';
 import { User$Model } from '@app/_common';
 import { RestController } from '@libs/core';
@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
+import { JWT_SECRET } from '../constants';
 
 @Injectable()
 export class AuthService extends RestController {
@@ -35,7 +36,7 @@ export class AuthService extends RestController {
     const secret = this.configService.get('settings.jwtSecret');
 
     return {
-      access_token: this.jwtService.sign(payload, { secret }),
+      access_token: this.jwtService.sign(payload, { secret:JWT_SECRET }),
     };
   }
 
@@ -53,7 +54,7 @@ export class AuthService extends RestController {
 
   async verify(token: string): Promise<User$Model> {
     const secret = this.configService.get('settings.jwtSecret');
-    const decoded = this.jwtService.verify(token, { secret });
+    const decoded = this.jwtService.verify(token, { secret:JWT_SECRET });
     const user = this.userService.getUserByEmail(decoded.email);
     return user;
   }
