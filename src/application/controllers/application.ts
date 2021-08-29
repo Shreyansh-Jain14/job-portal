@@ -1,7 +1,6 @@
 import { Request, Response, RestController, WithAlias } from '@libs/core';
 import { Controller, Get, Req, Res } from '@nestjs/common';
 import { UserDetailTransformer } from '@app/transformer';
-import { JobService } from '../services/job';
 import { Post } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { Job$Model, User$Model } from '@app/_common';
@@ -14,64 +13,61 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@app/auth/guards/jwt.auth.guard';
 import { Delete } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
+import { ApplicationService } from '../services/application';
 
-@Controller('jobs')
-export class JobController extends RestController {
-  constructor(private jobservice: JobService) {
+@Controller('app')
+export class ApplicationController extends RestController {
+  constructor(private applicationservice: ApplicationService) {
     super();
   }
 
   @Roles('CANDIDATE', 'RECRUITER')
   @Get( )
-  async getAll() {
-    const jobs= await this.jobservice.get();
+  async getAllapp() {
+    const applications= await this.applicationservice.get();
     return {
-      message: 'Jobs fetched successfully',
-      jobs
+      message: 'applications fetched successfully',
+      applications
     };
 
   }
 
   @Get(':id')
   async getById(@Param('id') id: string) {
-    const jobs = await this.jobservice.getById(id);
-    if (!jobs) throw new HttpException('job not found', 404);
-    return jobs;
+    const app = await this.applicationservice.getById(id);
+    if (!app) throw new HttpException('application not found', 404);
+    return app;
   }
 
-  @Roles('RECRUITER')
+  @Roles('CANDIDATE')
    @UseGuards(JwtAuthGuard)
-  @Post('addjob')
+  @Post('apply')
   create(@Req() req: Request & { user: User$Model }, @Body() body) {
-    return this.jobservice.create({
-      recruiterid: req.user.id,
-      title: body.title,
-      description: body.description,
-      ctc: body.ctc
+    return this.applicationservice.create({
+      userId: req.user.id,
+      jobId: body.jobid,
     });
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Roles('RECRUITER')
+  // @UseGuards(JwtAuthGuard)
+  // @Roles('RECRUITER')
   @Delete(':id')
   async delete(
-    @Req() req: Request & { user: User$Model },
     @Param('id') jobId: string,
   ) {
-    const deleted = await this.jobservice.delete({
+    const deleted = await this.applicationservice.delete({
       id: jobId,
-      recruiterid: req.user.id,
     });
     if (deleted === null) throw new UnauthorizedException();
     return { deleted };
   }
 
-  @Patch(':id')
-  async uppdatejob(@Param('id') id: string, @Body() data: Job$Model) {
-    await this.jobservice.update(id, data);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'job updated successfully',
-    };
-  }
+  // @Patch(':id')
+  // async uppdatejob(@Param('id') id: string, @Body() data: Job$Model) {
+  //   await this.applicationservice.update(id, data);
+  //   return {
+  //     statusCode: HttpStatus.OK,
+  //     message: 'job updated successfully',
+  //   };
+  // }
 }

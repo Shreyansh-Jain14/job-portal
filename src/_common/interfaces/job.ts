@@ -3,7 +3,7 @@ import { ObjectionModel } from '@libs/core';
 export interface Job$Model extends ObjectionModel {
   id?: string;
   title?: string;
-  location?: string;
+  description?: string;
   recruiterid?: string;
   ctc?: string;
   createdAt?: Date;

@@ -26,6 +26,15 @@ export class UserService {
   async updateUser(user: User$Model): Promise<number> {
     return this.users.updateWhere({ id: user.id }, user);
   }
+  async deleteuser(
+    where: User$Model  ): Promise<boolean | null> {
+        try {
+          const deleted = await this.users.deleteWhere(where);
+          return deleted;
+        } catch {
+          return null;
+        }
+      }
   @ListensTo('USER_SIGNED_UP')
   userSignedUp(event: UserSignedUp): void {
     console.log('EVENT RECEIVED ===>', event);

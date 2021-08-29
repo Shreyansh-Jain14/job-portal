@@ -14,10 +14,12 @@ import { ResetPasswordRepository } from './repositories/resetPasswordSecret/data
 import { RESET_PASSWORD_REPOSITORY } from './constants';
 import { AdminAuthController } from './controllers/admin';
 import { UserRepository } from '@app/user/repositories';
+import { JobModel, JobModule, JobService } from '@app/job';
 
 @Module({
   imports: [
     UserModule,
+    JobModule,
     ConfigModule,
     UserRepository,
     PassportModule.register({ defaultStrategy: 'jwt' }),

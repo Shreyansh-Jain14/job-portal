@@ -13,9 +13,7 @@ export class JobService {
     return this.jobs.all();
   } 
 
-  // async getUserByEmail(email: string): Promise<Record<string, any>> {
-  //   return this.jobs.firstWhere({ email });
-  // }
+
   async getById(id: string): Promise<Job$Model | null> {
     try {
       const job = await this.jobs.firstWhere({ id });
@@ -24,12 +22,10 @@ export class JobService {
       return null;
     }}
  
-  async createjob(job: Job$Model): Promise<Job$Model> {
-    return this.jobs.create(job);
-  }
-  // async updateUser(user: Job$Model): Promise<number> {
-  //   return this.jobs.updateWhere({ id: user.id }, user);
+  // async createjob(job: Job$Model): Promise<Job$Model> {
+  //   return this.jobs.create(job);
   // }
+ 
 
   create(data: Job$Model): Promise<Job$Model | null> {
     try {
